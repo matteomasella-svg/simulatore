@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2EMME Apartments - Suite Gestionale 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #021216;
+            --text-main: #ffffff;
+            --ottanio-palette: #004D54; 
+            --red-palette: #DB4F61;     
+            --green-palette: #54C4A6;
+            --card-bg: rgba(255, 255, 255, 0.03);   
+            --border: rgba(255, 255, 255, 0.1);
+            --glass-blur: blur(25px);
+        }
+
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: radial-gradient(circle at 50% 10%, rgba(0, 77, 84, 0.2) 0%, transparent 60%);
+            color: var(--text-main);
+            margin: 0; padding: 15px;
+            display: flex; justify-content: center; align-items: flex-start; min-height: 100vh;
+        }
+
+        .container {
+            width: 100%; max-width: 1380px;
+        }
+
+        .glass-panel {
+            background: var(--card-bg);
+            backdrop-filter: var(--glass-blur); -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+        }
+
+        .header-title { text-align: center; color: var(--green-palette); font-weight: 800; font-size: 24px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px;}
+
+        /* Grid Policies */
+        .policy-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 14px; margin-bottom: 22px; }
+        .policy-card { background: rgba(0,0,0,0.22); border-radius: 18px; padding: 18px; border-width: 2px; border-style: solid; min-height: 150px; display:flex; flex-direction:column; justify-content:flex-start; }
+        .card-header { font-weight: 800; font-size: 13px; margin-bottom: 8px;}
+        .card-info { font-size: 11px; color: #cbd5e0; line-height: 1.5; }
+        .card-info b { color: #fff; }
+        #tier-1 { border-color: var(--ottanio-palette); color: var(--ottanio-palette); }
+        #tier-2 { border-color: var(--green-palette); color: var(--green-palette); }
+        #tier-3 { border-color: var(--red-palette); color: var(--red-palette); }
+        #tier-4 { border-color: #FFD700; color: #FFD700; }
+
+        /* Form Inputs */
+        .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .input-group { display: flex; flex-direction: column; }
+        .input-label { font-size: 12px; color: var(--green-palette); font-weight: 800; margin-bottom: 6px; text-transform: uppercase; }
+        .styled-input { background: rgba(0,0,0,0.3); border: 1px solid var(--border); border-radius: 10px; color: #fff; padding: 10px 12px; font-family: inherit; font-size: 14px; outline: none; }
+        .styled-input:focus { border-color: var(--green-palette); }
+        .checkbox-label { font-size: 13px; color: #fff; display: flex; align-items: center; gap: 8px; margin-top: 10px; cursor: pointer; }
+
+        /* Simulator Results */
+        .results-flex { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 20px; border-top: 1px solid var(--border); padding-top: 20px;}
+        .breakdown-col { min-width: 0; font-size: 14px; color: #a0aec0; line-height: 1.9; background: rgba(0,0,0,0.22); border-radius: 18px; padding: 18px; min-height: 220px; }
+        .breakdown-col span.val { color: #fff; font-weight: 700; float: right; }
+        .breakdown-col span.highlight { color: var(--green-palette); font-weight: 800; float: right; }
+        .total-price { font-size: 32px; font-weight: 800; color: var(--green-palette); margin-top: 15px; padding-top: 15px; border-top: 1px dashed var(--border); text-align: right;}
+
+        /* Reverse Calculator Box */
+        .reverse-box { background: rgba(84, 196, 166, 0.05); border: 1px dashed var(--green-palette); border-radius: 12px; padding: 15px; margin-top: 20px; }
+        .reverse-box h4 { margin: 0 0 10px 0; color: var(--green-palette); font-size: 14px; }
+        
+        /* Tool Layouts */
+        .tool-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top:20px; align-items:start; }
+        
+        .schedule-box { background: rgba(0,0,0,0.26); padding: 18px; border-radius: 18px; font-size: 13px; min-height: 360px; }
+        .schedule-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .schedule-item:last-child { border-bottom: none; }
+        .badge-audit { background: var(--red-palette); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px;}
+        .badge-clean { background: var(--ottanio-palette); color: #fff; padding: 2px 6px; border-radius: 4px; font-weight: bold; font-size: 10px;}
+
+        /* Disdetta Box */
+        .disdetta-box { background: rgba(219, 79, 97, 0.06); border: 1px dashed var(--red-palette); padding: 18px; border-radius: 18px; font-size: 13px; min-height: 360px;}
+        .disdetta-box h4 { margin: 0 0 10px 0; color: var(--red-palette); font-size: 14px; }
+        .compare-table { width: 100%; margin-top: 10px; border-collapse: collapse; }
+        .compare-table td { padding: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); }
+        .compare-table tr:last-child td { font-weight: 800; border-bottom: none; }
+        .text-red { color: var(--red-palette); }
+        .text-green { color: var(--green-palette); }
+
+
+        /* Premium Recesso UI */
+        .premium-box { margin-top:20px; background: rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:16px; padding:18px; }
+        .premium-title { color: var(--green-palette); font-weight:800; font-size:14px; text-transform:uppercase; margin-bottom:12px; letter-spacing:0.6px; }
+        .premium-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:15px; }
+        .status-card { border-radius:16px; padding:16px; border:1px solid rgba(255,255,255,0.08); }
+        .status-card.safe { background: rgba(84,196,166,0.08); border-color: rgba(84,196,166,0.45); }
+        .status-card.risk { background: rgba(219,79,97,0.08); border-color: rgba(219,79,97,0.45); }
+        .status-chip { display:inline-block; padding:4px 10px; border-radius:999px; font-size:11px; font-weight:800; letter-spacing:0.5px; text-transform:uppercase; margin-bottom:10px; }
+        .status-card.safe .status-chip { background: rgba(84,196,166,0.18); color: var(--green-palette); }
+        .status-card.risk .status-chip { background: rgba(219,79,97,0.18); color: var(--red-palette); }
+        .status-big { font-size:22px; font-weight:800; margin-bottom:8px; }
+        .status-copy { font-size:12px; color:#d2d8df; line-height:1.6; }
+        .recesso-summary { margin-top:16px; border-top:1px solid rgba(255,255,255,0.08); padding-top:14px; }
+        .summary-row { display:flex; justify-content:space-between; gap:14px; font-size:13px; padding:7px 0; border-bottom:1px solid rgba(255,255,255,0.05); }
+        .summary-row:last-child { border-bottom:none; }
+        .summary-row .label { color:#aab3bf; }
+        .summary-row .value { color:#fff; font-weight:700; text-align:right; }
+        .summary-row .value.green { color: var(--green-palette); }
+        .summary-row .value.red { color: var(--red-palette); }
+        .helper-copy { margin-top:10px; font-size:11px; color:#aab3bf; line-height:1.6; }
+
+
+        .adr-benchmark-grid { display:grid; grid-template-columns: repeat(auto-fit, minmax(210px, 1fr)); gap:14px; margin-top:20px; }
+        .adr-card { background: rgba(0,0,0,0.24); border:1px solid var(--border); border-radius:16px; padding:16px; }
+        .adr-card h4 { margin:0 0 10px 0; color: var(--green-palette); font-size:14px; font-weight:800; }
+        .adr-line { display:flex; justify-content:space-between; gap:12px; font-size:13px; padding:5px 0; color:#d7dee7; }
+        .adr-line span:last-child { font-weight:700; color:#fff; text-align:right; }
+        .adr-delta { margin-top:10px; padding-top:10px; border-top:1px dashed rgba(255,255,255,0.12); font-weight:800; color:var(--green-palette); font-size:13px; }
+        .contract-text { max-width: 1040px; margin: 0 auto; }
+        .contract-text p, .contract-text li { max-width: 100%; }
+        .panel-inner { max-width: 1040px; margin: 0 auto; }
+        @media (max-width: 980px) {
+            .results-flex { grid-template-columns: 1fr; }
+            .tool-grid { grid-template-columns: 1fr; }
+            .premium-grid { grid-template-columns: 1fr; }
+            .policy-grid { grid-template-columns: 1fr 1fr; }
+        }
+        @media (max-width: 720px) {
+            body { padding: 10px; }
+            .glass-panel { padding: 18px; }
+            .policy-grid { grid-template-columns: 1fr; }
+            .results-flex { gap: 16px; }
+            .total-price { font-size: 28px; }
+        }
+
+
+        .schedule-box h4, .disdetta-box h4 { font-size:15px !important; }
+        .compare-table td { padding: 10px 6px; }
+        .summary-row { align-items:flex-start; }
+        .summary-row .value { max-width: 52%; white-space: normal; }
+        @media (max-width: 1180px) {
+            .policy-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .results-flex { grid-template-columns: 1fr; }
+            .tool-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 720px) {
+            .policy-grid { grid-template-columns: 1fr; }
+        }
+
+        /* Accordions */
+        .accordion { background: rgba(0, 0, 0, 0.3); color: var(--green-palette); cursor: pointer; padding: 18px; width: 100%; border: 1px solid var(--border); border-radius: 12px; margin-top: 10px; font-weight: 800; font-size: 14px; text-align: left; outline: none; transition: 0.3s;}
+        .accordion:hover { background: rgba(84, 196, 166, 0.1); }
+        .panel { padding: 0 20px; background: rgba(0, 0, 0, 0.15); max-height: 0; overflow: hidden; transition: max-height 0.4s ease-out; border-radius: 0 0 12px 12px; font-size: 13px; line-height: 1.7; color: #e2e8f0; }
+        .panel-inner { padding: 20px 0; }
+        .panel-inner h3 { color: var(--green-palette); font-weight: 800; margin-top: 20px; margin-bottom: 10px; }
+        .fair-use-table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 11px; }
+        .fair-use-table td, .fair-use-table th { border: 1px solid var(--border); padding: 8px; text-align: left; }
+        .fair-use-table th { background: var(--ottanio-palette); color: #fff; }
+
+        /* Contract Text */
+        .contract-text p { margin-bottom: 10px; }
+        .contract-text ul { margin-top: 0; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-title">2EMME SUITE CLIENT EXPERIENCE • VERSIONE CLIENTE</div>
+
+    <div class="policy-grid">
+        <div class="policy-card" id="tier-1">
+            <div class="card-header">STANDARD</div>
+            <div class="card-info">Soggiorni brevi fino a 13 notti con tariffa base e pulizia finale dedicata.</div>
+        </div>
+        <div class="policy-card" id="tier-2">
+            <div class="card-header">LONG STAY</div>
+            <div class="card-info">Da 14 a 29 notti con primi vantaggi economici e gestione operativa programmata.</div>
+        </div>
+        <div class="policy-card" id="tier-3">
+            <div class="card-header">EXTRA LONG</div>
+            <div class="card-info">Da 30 a 60 notti con forfait servizi e condizioni pensate per permanenze estese.</div>
+        </div>
+        <div class="policy-card" id="tier-4">
+            <div class="card-header">SMART</div>
+            <div class="card-info">Da 61 a 90 notti con massima convenienza e benefit dedicati alla lunga permanenza.</div>
+        </div>
+    </div>
+
+    <div class="glass-panel">
+        <div class="form-grid">
+            <div class="input-group">
+                <label class="input-label">Alloggio</label>
+                <select id="accommodation" class="styled-input" onchange="applyAccommodationADR(); runEngine();">
+                    <option value="85">NoLo Nest</option>
+                    <option value="75">NoLo Studio</option>
+                    <option value="95" selected>NoLo Suite</option>
+                    <option value="80">NoLo Heritage</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Data Check-in</label>
+                <input type="date" id="date-in" class="styled-input" value="2026-03-30" onchange="runEngine()">
+            </div>
+            <div class="input-group">
+                <label class="input-label">Data Check-out</label>
+                <input type="date" id="date-out" class="styled-input" value="2026-05-30" onchange="runEngine()">
+            </div>
+            <div class="input-group">
+                <label class="input-label">ADR Base Netto (€)</label>
+                <input type="number" id="adr-base" class="styled-input" value="80" oninput="runEngine()">
+            </div>
+            <div class="input-group">
+                <label class="input-label">Stagione Utenze (<30nt)</label>
+                <select id="season" class="styled-input" onchange="runEngine()">
+                    <option value="0.04">Estate (+4% Cap 80€)</option>
+                    <option value="0.05">Inverno (+5% Cap 80€)</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label class="input-label">Pagamento (>30nt)</label>
+                <select id="pay-mode" class="styled-input" onchange="runEngine()">
+                    <option value="1">Settimanale (Nessuno sconto)</option>
+                    <option value="0.95">Mensile Anticipato (-5%)</option>
+                    <option value="0.90">Totale Anticipato (-10%)</option>
+                </select>
+            </div>
+        </div>
+        <label class="checkbox-label">
+            <input type="checkbox" id="chk-parking" onchange="runEngine()"> Richiesta Parcheggio
+        </label>
+
+        <div class="reverse-box">
+            <h4>Modulatore Forfait (Ingegneria Inversa)</h4>
+            <div style="display:flex; gap:15px; flex-wrap:wrap; align-items:center;">
+                <div class="input-group" style="flex:1; min-width:200px;">
+                    <label class="input-label" style="color:#fff;">Imposta Budget FINALE MENSILE (€)</label>
+                    <div style="display:flex; gap:10px;">
+                        <input type="number" id="target-monthly" class="styled-input" placeholder="Es. 2200" style="width:100%;">
+                        <button onclick="calculateReverseMonthly()" style="background:var(--green-palette); color:#000; border:none; border-radius:8px; padding:0 15px; font-weight:bold; cursor:pointer;">Calcola ADR</button>
+                    </div>
+                </div>
+                <div class="input-group" style="flex:1; min-width:200px;">
+                    <label class="input-label" style="color:#fff;">Imposta Budget NETTO SETTIMANA (€)</label>
+                    <div style="display:flex; gap:10px;">
+                        <input type="number" id="target-weekly" class="styled-input" placeholder="Es. 500" style="width:100%;">
+                        <button onclick="calculateReverseWeekly()" style="background:var(--green-palette); color:#000; border:none; border-radius:8px; padding:0 15px; font-weight:bold; cursor:pointer;">Calcola ADR</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="premium-box">
+            <div class="premium-title">Simulatore Recesso Anticipato Premium</div>
+            <div class="premium-grid" style="margin-bottom:16px;">
+                <div class="input-group">
+                    <label class="input-label">Data comunicazione recesso</label>
+                    <input type="date" id="recesso-date" class="styled-input" value="2026-03-30" onchange="runEngine()">
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Procedura scelta</label>
+                    <select id="recesso-mode" class="styled-input" onchange="runEngine()">
+                        <option value="regolare">Recesso programmato (mercoledì + 10 giorni)</option>
+                        <option value="irregolare">Recesso irregolare</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label class="input-label">Giorno rilascio previsto</label>
+                    <input type="text" id="release-dow" class="styled-input" value="Domenica" readonly>
+                </div>
+            </div>
+
+            <div class="premium-grid">
+                <div class="status-card safe">
+                    <div class="status-chip">Uscita corretta</div>
+                    <div class="status-big">Senza penali</div>
+                    <div class="status-copy">
+                        Se la comunicazione avviene di mercoledì e viene rispettato il preavviso di 10 giorni, l'uscita resta ordinata e senza penali. Restano dovute la settimana della notifica e la settimana successiva.
+                    </div>
+                </div>
+                <div class="status-card risk">
+                    <div class="status-chip">Uscita irregolare</div>
+                    <div class="status-big">Penale applicabile</div>
+                    <div class="status-copy">
+                        Se non viene rispettata la procedura, possono essere addebitati penali, sconti non sostenibili, benefit già fruiti e overuse, con compensazione sulla cauzione.
+                    </div>
+                </div>
+            </div>
+
+            <div class="recesso-summary">
+                <div class="summary-row"><span class="label">Esito procedura</span><span class="value" id="recesso-status">--</span></div>
+                <div class="summary-row"><span class="label">Mercoledì utile di notifica</span><span class="value" id="recesso-notice-date">--</span></div>
+                <div class="summary-row"><span class="label">Data rilascio calcolata</span><span class="value" id="recesso-release-date">--</span></div>
+                <div class="summary-row"><span class="label">Settimane dovute</span><span class="value green" id="recesso-weeks-due">€ 0.00</span></div>
+                <div class="summary-row"><span class="label">Penale massima trattenibile</span><span class="value red" id="recesso-penalty">€ 0.00</span></div>
+                <div class="summary-row"><span class="label">Messaggio cliente</span><span class="value" id="recesso-message">--</span></div>
+            </div>
+            <div class="helper-copy">
+                Comunicazione corretta = mercoledì + 10 giorni di preavviso. In tal caso non si applicano penali, ma restano dovute la settimana in corso e la successiva. In caso di procedura irregolare, il sistema mostra l'importo massimo di compensazione applicabile.
+            </div>
+        </div>
+
+<div class="results-flex">
+            <div class="breakdown-col">
+                <div>Notti Totali: <span class="val" id="res-days">0</span></div>
+                <div>Costo Soggiorno Lordo: <span class="val">€ <span id="res-gross">0.00</span></span></div>
+                <div>Sconti (Tiered + Pagamento): <span class="highlight">- € <span id="res-discount">0.00</span></span></div>
+                <div>Utenze / Surcharge: <span class="val">€ <span id="res-util">0.00</span></span></div>
+                <div>Imposta di Registro (Ospite): <span class="val">€ <span id="res-reg">0.00</span></span></div>
+            </div>
+            <div class="breakdown-col">
+                <div>Pulizie Intermedie: <span class="val">€ <span id="res-clean-int">0.00</span></span></div>
+                <div>Audit Tecnico (-10gg): <span class="val">€ <span id="res-audit">0.00</span></span></div>
+                <div>Pulizia Finale: <span class="val">€ <span id="res-clean-fin">0.00</span></span></div>
+                <div>Quota Parcheggio Ospite: <span class="val">€ <span id="res-parking">0.00</span></span></div>
+                <div>Tasse e Costo Servizio: <span class="val">€ <span id="res-tax">0.00</span></span></div>
+            </div>
+        </div>
+        <div class="total-price">TOTALE OSPITE: € <span id="res-total">0.00</span></div>
+    </div>
+
+    <div class="tool-grid">
+        <div class="schedule-box">
+            <h4 style="margin:0 0 10px 0; color:var(--green-palette); text-transform:uppercase;">Schedule Operativo (Back-Scheduling)</h4>
+            <div id="schedule-list">
+                </div>
+        </div>
+
+        
+        <div class="disdetta-box">
+            <h4 style="text-transform:uppercase;">Riepilogo economico recesso</h4>
+            <div style="margin-bottom:10px;">Data comunicazione simulata: <span id="today-date-str">30/03/2026</span></div>
+            <div>Mercoledì utile: <b class="text-red" id="notice-day">Mercoledì --/--/----</b></div>
+            <div>Rilascio stimato: <b class="text-red" id="release-day">Domenica --/--/----</b></div>
+
+            <table class="compare-table">
+                <tr><td>Sconti già goduti</td><td align="right" class="text-red" id="pen-disc-tier">€ 0.00</td></tr>
+                <tr><td>Benefit maturati</td><td align="right" class="text-red" id="pen-disc-ben">€ 0.00</td></tr>
+                <tr><td>Settimane dovute (uscita corretta)</td><td align="right" class="text-green" id="weeks-due-box">€ 0.00</td></tr>
+                <tr><td><b class="text-green">Penale massima (uscita irregolare)</b></td><td align="right" class="text-green" id="pen-value">€ 0.00</td></tr>
+            </table>
+            <div style="margin-top:8px; font-size:10px; color:#aaa;">Per il cliente: procedura trasparente, uscita ordinata e nessuna penale se viene rispettata la regola del mercoledì con 10 giorni di preavviso.</div>
+        </div>
+    </div>
+</div>
+
+    <h3 style="margin-top:40px; color:#fff;">Documentazione e Regolamenti</h3>
+    
+    <button class="accordion">1. PANORAMICA COSTI E PAGAMENTI <span>▼</span></button>
+    <div class="panel"><div class="panel-inner">
+        <h3>1. Costi e Pagamenti</h3>
+        <p><strong>Tassa di Soggiorno:</strong> Dovuta prime 14 notti (€9,50/notte). Per >75 giorni, assorbita dall'Host come benefit alternativo.</p>
+        <p><strong>Imposta Registro:</strong> Obbligatoria >30gg. 100% ospite (30-60gg), 50% (61-75gg), 100% Host (>75gg).</p>
+        <p><strong>Parcheggio (50/50):</strong> Fascia 30-60gg diviso a metà (€150 ospite/host). Oltre 60gg 100% gratuito.</p>
+        
+        <h3>Protocollo Mid-Week Settlement e Recesso</h3>
+        <ul>
+            <li><strong>Ciclo Pagamento:</strong> Ogni mercoledì per la settimana successiva.</li>
+            <li><strong>Recesso Programmato (senza penali):</strong> Comunicazione il mercoledì, preavviso minimo 10 giorni, con pagamento della settimana della notifica e di quella successiva, anche se non interamente fruita.</li>
+            <li><strong>Recesso Irregolare:</strong> Mancato rispetto della procedura = applicazione di una compensazione economica fino a 2 settimane, oltre a eventuali overuse e conguagli maturati.</li>
+        </ul>
+    </div></div>
+
+    <button class="accordion">2. REGOLE DELLA CASA E PULIZIE <span>▼</span></button>
+    <div class="panel"><div class="panel-inner">
+        <p><strong>Regole:</strong> Solo registrati Alloggiati Web. Divieto fumo (penale 200€). No animali. Quiete 23:00-08:00. Differenziata obbligatoria.</p>
+        <h3>Scheduling Interventi (Back-Scheduling)</h3>
+        <p>Date calcolate a ritroso dal check-out per massima efficienza:</p>
+        <ul>
+            <li><strong>Audit Tecnico (€40):</strong> Fissato a -10 giorni. Controllo inventario e inizio pulizia profonda.</li>
+            <li><strong>Intermedie / Legionella (€40):</strong> Ogni 14 giorni a ritroso. Cambio biancheria e sanificazione punti acqua. Mese 1: 100% ospite. Mese 2: 50% ospite. Mese 3: Gratis.</li>
+            <li><strong>Pulizia Finale:</strong> Fino 29nt = 45€. Oltre 30nt = 80€.</li>
+        </ul>
+    </div></div>
+
+    <button class="accordion">3. MILANO GREEN DEAL E FAIR USE <span>▼</span></button>
+    <div class="panel"><div class="panel-inner">
+        <p><strong>Aria Condizionata:</strong> Minimo 20°C, finestre chiuse. Divieto uso 24/7. Monitoraggio domotico attivo.</p>
+        <p><strong>Utenze (<30gg):</strong> Surcharge Estate +4%, Inverno +5% (Cap max 80€).</p>
+        <p><strong>Forfait (>30gg):</strong> 90€ per mese intero + 3€/giorno eccedente (Max 80€/mese per eccedenza).</p>
+        <h3>Soglie Contrattuali ed Extracosti</h3>
+        <p>Penali overuse: Elettricità 0,80€/kWh. Riscaldamento Centralizzato 0,35€/scatto. Gas 1,50€/Smc.</p>
+        <table class="fair-use-table">
+            <tr><th>Alloggio</th><th>Estate (Elettricità)</th><th>Inverno (Risc. + Elettr.)</th></tr>
+            <tr><td>Nest / Suite</td><td>8 kWh/gg (240/mese)</td><td>25 scatti/gg + 6 kWh/gg</td></tr>
+            <tr><td>Studio</td><td>6 kWh/gg (180/mese)</td><td>14 scatti/gg + 5 kWh/gg</td></tr>
+            <tr><td>Heritage</td><td>3 kWh/gg (90/mese)</td><td>4 Smc/gg + 3 kWh/gg</td></tr>
+        </table>
+    </div></div>
+
+    <button class="accordion">4. INFORMATIVA PRIVACY GDPR <span>▼</span></button>
+    <div class="panel"><div class="panel-inner">
+        <p>Dati raccolti minimizzati per Alloggiati Web, obblighi fiscali e contratto (Art 6.1.b/c). Conservazione 5 anni (PS) / 10 anni (Fiscale). Connessioni TLS. Diritti GDPR garantiti. Titolare: 2EMME RE&CONSULTING.</p>
+    </div></div>
+
+    <section style="margin-top:30px;">
+        <div class="glass-panel contract-text">
+            <h3 style="color:var(--green-palette); text-align:center;">CONTRATTO DI OSPITALITÀ (CAV) - VERSIONE 3</h3><p style="text-align:center; color:#cbd5e0; max-width:820px; margin:0 auto 18px auto;">Versione cliente con uscita programmata trasparente: regola semplice, tempi certi e tutele chiare sia per l’Ospite sia per la Struttura.</p>
+            <p><strong>Periodo di locazione pattuito:</strong> Dal <span id="c-in" style="color:var(--green-palette);font-weight:bold;">--</span> al <span id="c-out" style="color:var(--green-palette);font-weight:bold;">--</span> (<span id="c-days">0</span> notti).</p>
+            <p><strong>ART. 1-2 Tasse e Obblighi:</strong> L'accesso è subordinato al check-in online. Tassa di soggiorno saldata prima dell'ingresso.</p>
+            <p><strong>ART. 3-bis Recesso Programmato:</strong> L’Ospite può recedere senza penali comunicando il recesso in giorno mercoledì e garantendo almeno 10 (dieci) giorni di preavviso. In tale ipotesi restano dovute la settimana in corso alla data di comunicazione e la settimana immediatamente successiva, anche se non integralmente fruita, così da consentire alla Struttura l’organizzazione dell’audit, la verifica dei consumi e la pianificazione del successivo riassetto.</p>
+            <p><strong>ART. 3-ter Recesso Irregolare:</strong> In caso di comunicazione effettuata in giorno diverso dal mercoledì, di mancato rispetto del preavviso, di rilascio anticipato o di mancato pagamento dei periodi dovuti, il recesso sarà considerato irregolare e potrà comportare l’applicazione di una compensazione economica fino a 2 (due) settimane, oltre al recupero di eventuali benefit, overuse e conguagli, con facoltà di trattenuta sulla cauzione.</p>
+            <p><strong>ART. 4 Condizioni Economiche (Applicate):</strong> L'ADR di base è fissata a €<span id="c-adr">0</span>. La modalità di pagamento selezionata genera gli sconti e i benefit visibili nel piano di riepilogo superiore. I benefit sono revocabili per inadempienza.</p>
+            <p><strong>ART. 5 Polizza e Cauzione:</strong> Cauzione fissa in base alla durata o opzione Waiver Polizza Danni obbligatoria per residenti a lungo termine.</p>
+            <p><strong>ART. 6 Policy Green e Utenze:</strong> L'Ospite accetta le soglie Fair Use stagionali e il listino penali applicato in caso di overuse rilevato dalla domotica.</p>
+            <p><strong>Approvazione specifica (Artt. 1341-1342 cc):</strong> L'Ospite approva espressamente le clausole di penale, recesso, privacy e accesso d'emergenza.</p>
+        </div>
+    </section>
+
+</div>
+
+<script>
+
+    function applyAccommodationADR() {
+        const el = document.getElementById('accommodation');
+        const adr = parseFloat(el.value || '80');
+        document.getElementById('adr-base').value = adr.toFixed(2);
+    }
+
+    // CORE LOGIC ENGINE
+    function runEngine() {
+        const dIn = new Date(document.getElementById('date-in').value);
+        const dOut = new Date(document.getElementById('date-out').value);
+        if(isNaN(dIn) || isNaN(dOut) || dOut <= dIn) { return; }
+        
+        const days = Math.ceil(Math.abs(dOut - dIn) / (1000 * 60 * 60 * 24));
+        const adrBase = parseFloat(document.getElementById('adr-base').value) || 80;
+        const seasonRate = parseFloat(document.getElementById('season').value);
+        const payMult = parseFloat(document.getElementById('pay-mode').value);
+        const reqPark = document.getElementById('chk-parking').checked;
+
+        document.getElementById('res-days').innerText = days;
+
+        // Tiered Pricing
+        let netBase = 0;
+        let dStd = Math.min(days, 13);
+        let dLong = Math.max(0, Math.min(days - 13, 16));
+        let dExt = Math.max(0, Math.min(days - 29, 31));
+        let dSmt = Math.max(0, days - 60);
+
+        netBase = (dStd * adrBase) + (dLong * adrBase * 0.95) + (dExt * adrBase * 0.90) + (dSmt * adrBase * 0.85);
+
+        let stayGross = adrBase * days;
+        let stayFinal = netBase * payMult;
+
+        // Cleaning Logic
+        let audit = days >= 14 ? 40 : 0;
+        let cleanFin = days >= 30 ? 80 : 45;
+        let numInterm = Math.floor((days - 10) / 14);
+        if(numInterm < 0) numInterm = 0;
+        
+        let cleanInt = 0;
+        let scheduleHTML = "";
+        
+        if(days >= 14) {
+            // Audit schedule
+            let auditDate = new Date(dOut);
+            auditDate.setDate(auditDate.getDate() - 10);
+            scheduleHTML += `<div class="schedule-item"><span><span class="badge-audit">AUDIT</span> Verifica & Pre-Clean</span> <span>${auditDate.toLocaleDateString('it-IT')} (-10gg)</span></div>`;
+            
+            // Intermedie Back-schedule
+            for(let i=1; i<=numInterm; i++) {
+                let intermDate = new Date(dOut);
+                let daysBack = 10 + (i * 14); // 24, 38, 52...
+                intermDate.setDate(intermDate.getDate() - daysBack);
+                
+                // Only schedule if it happens after check-in
+                if(intermDate > dIn) {
+                    let costStr = "";
+                    if(daysBack > 60) { costStr = "Gratis (Host)"; cleanInt += 0; }
+                    else if(daysBack > 30) { costStr = "20€ (50% Sconto)"; cleanInt += 20; }
+                    else { costStr = "40€ (Intera)"; cleanInt += 40; }
+                    
+                    scheduleHTML += `<div class="schedule-item"><span><span class="badge-clean">INTERMEDIA</span> Cambio & Legionella</span> <span>${intermDate.toLocaleDateString('it-IT')} [${costStr}]</span></div>`;
+                }
+            }
+        } else {
+            scheduleHTML = "<em>Nessun intervento intermedio necessario per soggiorni brevi.</em>";
+        }
+        document.getElementById('schedule-list').innerHTML = scheduleHTML;
+
+        // Utilities & Taxes
+        let util = days < 30 ? Math.min(netBase * seasonRate, 80) : (Math.floor(days/30)*90) + Math.min((days%30)*3, 80);
+        let reg = days > 75 ? 0 : (days > 60 ? ((netBase * 0.02)+16)*0.5 : (days >= 30 ? (netBase * 0.02)+16 : 0));
+        let tax = 9.5 * Math.min(days, 14);
+        let srv = 15;
+        
+        // Parking
+        let park = 0;
+        if(reqPark) {
+            if(days >= 61) park = 0;
+            else if(days >= 30) park = 150;
+            else park = days * 10;
+        }
+
+        // Totals
+        let discount = stayGross - stayFinal;
+        let total = stayFinal + util + reg + cleanInt + audit + cleanFin + park + tax + srv;
+
+        // DOM Updates
+        document.getElementById('res-gross').innerText = stayGross.toFixed(2);
+        document.getElementById('res-discount').innerText = discount.toFixed(2);
+        document.getElementById('res-util').innerText = util.toFixed(2);
+        document.getElementById('res-reg').innerText = reg.toFixed(2);
+        document.getElementById('res-clean-int').innerText = cleanInt.toFixed(2);
+        document.getElementById('res-audit').innerText = audit.toFixed(2);
+        document.getElementById('res-clean-fin').innerText = cleanFin.toFixed(2);
+        document.getElementById('res-parking').innerText = park.toFixed(2);
+        document.getElementById('res-tax').innerText = (tax + srv).toFixed(2);
+        document.getElementById('res-total').innerText = total.toFixed(2);
+
+        // Contract updates
+        document.getElementById('c-in').innerText = dIn.toLocaleDateString('it-IT');
+        document.getElementById('c-out').innerText = dOut.toLocaleDateString('it-IT');
+        document.getElementById('c-days').innerText = days;
+        document.getElementById('c-adr').innerText = adrBase.toFixed(2);
+
+        // Disdetta Calculator (Assume today is March 30, 2026)
+        runDisdettaCalc(adrBase, netBase, payMult, days);
+    }
+
+    
+    // SIMULATORE RECESSO PREMIUM
+    function getNextWednesday(dateObj) {
+        let d = new Date(dateObj);
+        let day = d.getDay();
+        let delta = (3 - day + 7) % 7;
+        if (delta === 0) return new Date(d);
+        d.setDate(d.getDate() + delta);
+        return d;
+    }
+
+    function formatEuro(v) { return `€ ${v.toFixed(2)}`; }
+
+    function runDisdettaCalc(adrBase, netBase, payMult, days) {
+        const rawDate = document.getElementById('recesso-date') ? document.getElementById('recesso-date').value : '2026-03-30';
+        const today = rawDate ? new Date(rawDate) : new Date('2026-03-30');
+        const recessoMode = document.getElementById('recesso-mode') ? document.getElementById('recesso-mode').value : 'regolare';
+
+        document.getElementById('today-date-str').innerText = today.toLocaleDateString('it-IT');
+
+        const isWednesday = today.getDay() === 3;
+        const noticeDate = isWednesday ? new Date(today) : getNextWednesday(today);
+        const releaseDate = new Date(noticeDate);
+        releaseDate.setDate(releaseDate.getDate() + 10);
+
+        const releaseDayName = ['Domenica','Lunedì','Martedì','Mercoledì','Giovedì','Venerdì','Sabato'][releaseDate.getDay()];
+        document.getElementById('release-dow').value = releaseDayName;
+
+        document.getElementById('notice-day').innerText = `Mercoledì ${noticeDate.toLocaleDateString('it-IT')}`;
+        document.getElementById('release-day').innerText = `${releaseDayName} ${releaseDate.toLocaleDateString('it-IT')}`;
+
+        const dailyNet = (netBase * payMult) / days;
+        const weeklyCost = dailyNet * 7;
+        const dueWeeks = weeklyCost * 2;
+        const penaltyValue = dailyNet * 14;
+
+        let tierDiscValue = (adrBase * days) - (netBase * payMult);
+        let benValue = 0;
+        if(days >= 14) benValue += 10;
+        if(days >= 30) benValue += 20;
+        if(document.getElementById('chk-parking').checked && days >= 61) benValue += 150;
+
+        let statusText = '';
+        let messageText = '';
+        let penaltyShown = 0;
+
+        if (recessoMode === 'regolare' && isWednesday) {
+            statusText = 'USCITA CORRETTA SENZA PENALI';
+            messageText = 'Procedura rispettata: restano dovute 2 settimane, senza penali.';
+            penaltyShown = 0;
+        } else if (recessoMode === 'regolare' && !isWednesday) {
+            statusText = 'IN ATTESA DEL MERCOLEDÌ UTILE';
+            messageText = 'Per uscire senza penali, la comunicazione deve essere formalizzata il prossimo mercoledì utile.';
+            penaltyShown = 0;
+        } else {
+            statusText = 'RECESSO IRREGOLARE';
+            messageText = 'Procedura non rispettata: può essere applicata la penale massima fino a 2 settimane.';
+            penaltyShown = penaltyValue;
+        }
+
+        document.getElementById('pen-disc-tier').innerText = formatEuro(tierDiscValue);
+        document.getElementById('pen-disc-ben').innerText = formatEuro(benValue);
+        document.getElementById('weeks-due-box').innerText = formatEuro(dueWeeks);
+        document.getElementById('pen-value').innerText = formatEuro(penaltyShown);
+
+        document.getElementById('recesso-status').innerText = statusText;
+        document.getElementById('recesso-status').className = 'value ' + (penaltyShown > 0 ? 'red' : 'green');
+        document.getElementById('recesso-notice-date').innerText = noticeDate.toLocaleDateString('it-IT');
+        document.getElementById('recesso-release-date').innerText = `${releaseDayName} ${releaseDate.toLocaleDateString('it-IT')}`;
+        document.getElementById('recesso-weeks-due').innerText = formatEuro(dueWeeks);
+        document.getElementById('recesso-penalty').innerText = formatEuro(penaltyShown);
+        document.getElementById('recesso-message').innerText = messageText;
+    }
+
+    // REVERSE CALCULATORS
+
+    function calculateReverseMonthly() {
+        const targetMonthly = parseFloat(document.getElementById('target-monthly').value);
+        if(!targetMonthly) return;
+        // For a 30-day block, Fixed Costs estimate: 
+        // Util: 90. CleanFin: 80. Audit: 40. Interm(1): 40. Tax(14d): 133. Srv: 15. Reg(30d): ~20.
+        // Total fixed ~ 418€.
+        let fixedCosts = 90 + 80 + 40 + 40 + 133 + 15 + 20; 
+        let targetStay = targetMonthly - fixedCosts;
+        
+        // 30 day tier multiplier is roughly 0.95 overall without upfront discount. 
+        // If they pick monthly upfront, another 0.95. Let's assume standard monthly upfront (0.95)
+        let requiredNetBase = targetStay / 0.95; 
+        let approxADR = requiredNetBase / 29.5; // (13*1 + 16*0.95 + 1*0.90 = ~28.6 equivalent full days, simplified)
+        
+        // Very basic approximation. To be precise we iteratively search:
+        let testADR = 50;
+        for(let i=0; i<100; i++) {
+            let nBase = (13 * testADR) + (16 * testADR * 0.95) + (1 * testADR * 0.90);
+            let sFinal = nBase * 0.95; // Assume Mensile Anticipato
+            let util = 90;
+            let reg = (nBase * 0.02) + 16;
+            let taxes = 133 + 15;
+            let clean = 80 + 40 + 40;
+            let total = sFinal + util + reg + taxes + clean;
+            
+            if(Math.abs(total - targetMonthly) < 1) break;
+            if(total < targetMonthly) testADR += 0.5;
+            else testADR -= 0.5;
+        }
+
+        document.getElementById('adr-base').value = testADR.toFixed(2);
+        document.getElementById('pay-mode').value = "0.95"; // Set to Mensile
+        
+        // Reset dates to 30 days gap
+        document.getElementById('date-in').value = "2026-03-30";
+        document.getElementById('date-out').value = "2026-04-29";
+        
+        runEngine();
+        alert(`ADR impostata automaticamente a ~€${testADR.toFixed(2)} per raggiungere il target di €${targetMonthly}/mese.`);
+    }
+
+    function calculateReverseWeekly() {
+        const targetWeekly = parseFloat(document.getElementById('target-weekly').value);
+        if(!targetWeekly) return;
+        
+        let targetDailyNet = targetWeekly / 7;
+        // Se settimanale, non c'è sconto cash flow. Supponiamo un soggiorno lungo (sconto tier medio ~5%)
+        let testADR = targetDailyNet / 0.95;
+        
+        document.getElementById('adr-base').value = testADR.toFixed(2);
+        document.getElementById('pay-mode').value = "1"; // Set to Settimanale
+        runEngine();
+        alert(`ADR impostata automaticamente a ~€${testADR.toFixed(2)} per un netto settimanale di €${targetWeekly}. (Al netto dei costi fissi)`);
+    }
+
+    // Accordion Logic
+    document.querySelectorAll('.accordion').forEach(acc => {
+        acc.onclick = function() {
+            this.classList.toggle('active');
+            const panel = this.nextElementSibling;
+            panel.style.maxHeight = panel.style.maxHeight ? null : panel.scrollHeight + "px";
+        };
+    });
+
+    // Initialize
+    window.onload = function(){ applyAccommodationADR(); runEngine(); };
+</script>
+
+</body>
+</html>
